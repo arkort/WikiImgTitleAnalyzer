@@ -1,0 +1,14 @@
+/WikiImgTitleAnalyzer.UI/obj
+/WikiImgTitleAnalyzer.UI/bin
+/WikiImgTitleAnalyzer.Core/bin/Debug
+/WikiImgTitleAnalyzer.Core/obj/Debug
+/WikiImgTitleAnalyzer.Core/bin
+/WikiImgTitleAnalyzer.Core/obj
+/WikiImgTitleAnalyzer.Entities/obj
+/WikiImgTitleAnalyzer.Entities/bin
+/WikiImgTitleAnalyzer.IntegrationTests/obj
+/WikiImgTitleAnalyzer.IntegrationTests/bin
+/WikiImgTitleAnalyzer.Interfaces/obj
+/WikiImgTitleAnalyzer.Interfaces/bin
+/TestResults
+/packages
