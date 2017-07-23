@@ -12,3 +12,5 @@
 /WikiImgTitleAnalyzer.Interfaces/bin
 /TestResults
 /packages
+/WikiImgTitleAnalyzer.UnitTests/bin/Debug
+/WikiImgTitleAnalyzer.UnitTests/obj/Debug

@@ -44,7 +44,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Gateways\WikipediaGateway.cs" />
+    <Compile Include="JaroWinklerProcessor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SimilarityGroup.cs" />
+    <Compile Include="SimilarityStringExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\WikiImgTitleAnalyzer.Interfaces\WikiImgTitleAnalyzer.Interfaces.csproj">

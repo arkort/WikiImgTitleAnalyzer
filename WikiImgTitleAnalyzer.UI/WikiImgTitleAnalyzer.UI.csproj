@@ -54,6 +54,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="SimpleCommand.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -62,6 +63,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="MainViewModel.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -92,6 +94,16 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\WikiImgTitleAnalyzer.Core\WikiImgTitleAnalyzer.Core.csproj">
+      <Project>{978ebd63-495f-439f-a100-924bdb54a3a5}</Project>
+      <Name>WikiImgTitleAnalyzer.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WikiImgTitleAnalyzer.Interfaces\WikiImgTitleAnalyzer.Interfaces.csproj">
+      <Project>{1721d319-06e4-4cf6-ab97-371fad545963}</Project>
+      <Name>WikiImgTitleAnalyzer.Interfaces</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

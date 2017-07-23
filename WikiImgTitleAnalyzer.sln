@@ -1,19 +1,19 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26430.12
+VisualStudioVersion = 15.0.26430.16
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WikiImgTitleAnalyzer.UI", "WikiImgTitleAnalyzer.UI\WikiImgTitleAnalyzer.UI.csproj", "{929D1A0A-3C1F-4800-ABCD-D8F8293ACA0D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WikiImgTitleAnalyzer.Core", "WikiImgTitleAnalyzer.Core\WikiImgTitleAnalyzer.Core.csproj", "{978EBD63-495F-439F-A100-924BDB54A3A5}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WikiImgTitleAnalyzer.Entities", "WikiImgTitleAnalyzer.Entities\WikiImgTitleAnalyzer.Entities.csproj", "{4ADFE5F5-7DB7-41F1-B559-A1E8076E62EE}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WikiImgTitleAnalyzer.Interfaces", "WikiImgTitleAnalyzer.Interfaces\WikiImgTitleAnalyzer.Interfaces.csproj", "{1721D319-06E4-4CF6-AB97-371FAD545963}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WikiImgTitleAnalyzer.Tests", "WikiImgTitleAnalyzer.Tests", "{F2382591-78F9-49F5-83C5-9556DB333A0F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WikiImgTitleAnalyzer.IntegrationTests", "WikiImgTitleAnalyzer.IntegrationTests\WikiImgTitleAnalyzer.IntegrationTests.csproj", "{E1EEB294-DF52-47A5-ABED-C3151F73C615}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WikiImgTitleAnalyzer.UnitTests", "WikiImgTitleAnalyzer.UnitTests\WikiImgTitleAnalyzer.UnitTests.csproj", "{AAE73EDA-797D-48DA-81C2-FA00CA21A195}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,10 +29,6 @@ Global
 		{978EBD63-495F-439F-A100-924BDB54A3A5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{978EBD63-495F-439F-A100-924BDB54A3A5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{978EBD63-495F-439F-A100-924BDB54A3A5}.Release|Any CPU.Build.0 = Release|Any CPU
-		{4ADFE5F5-7DB7-41F1-B559-A1E8076E62EE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4ADFE5F5-7DB7-41F1-B559-A1E8076E62EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4ADFE5F5-7DB7-41F1-B559-A1E8076E62EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4ADFE5F5-7DB7-41F1-B559-A1E8076E62EE}.Release|Any CPU.Build.0 = Release|Any CPU
 		{1721D319-06E4-4CF6-AB97-371FAD545963}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{1721D319-06E4-4CF6-AB97-371FAD545963}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1721D319-06E4-4CF6-AB97-371FAD545963}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -41,11 +37,16 @@ Global
 		{E1EEB294-DF52-47A5-ABED-C3151F73C615}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E1EEB294-DF52-47A5-ABED-C3151F73C615}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E1EEB294-DF52-47A5-ABED-C3151F73C615}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AAE73EDA-797D-48DA-81C2-FA00CA21A195}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AAE73EDA-797D-48DA-81C2-FA00CA21A195}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AAE73EDA-797D-48DA-81C2-FA00CA21A195}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AAE73EDA-797D-48DA-81C2-FA00CA21A195}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{E1EEB294-DF52-47A5-ABED-C3151F73C615} = {F2382591-78F9-49F5-83C5-9556DB333A0F}
+		{AAE73EDA-797D-48DA-81C2-FA00CA21A195} = {F2382591-78F9-49F5-83C5-9556DB333A0F}
 	EndGlobalSection
 EndGlobal

@@ -7,6 +7,42 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="350" Width="525">
     <Grid>
-        
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition
+                Height="Auto" />
+            <RowDefinition
+                Height="Auto" />
+            <RowDefinition
+                Height="Auto" />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        <TextBlock
+            Text="Latitude"/>
+        <TextBox
+            Grid.Column="1"
+            Text="{Binding Latitude}"/>
+        <TextBlock
+            Grid.Row="1"
+            Text="Longtitude"/>
+        <TextBox
+            Grid.Row="1"
+            Grid.Column="1"
+            Text="{Binding Longtitude}"/>
+        <Button 
+            Grid.Row="2"
+            Grid.ColumnSpan="2"
+            Content="Start!"
+            Command="{Binding StartCommand}"/>
+        <TextBox 
+            Grid.Row="3"
+            Grid.ColumnSpan="2"
+            VerticalAlignment="Stretch"
+            HorizontalAlignment="Stretch"
+            IsEnabled="False"
+            Text="{Binding SimilarStrings}"/>
     </Grid>
 </Window>
