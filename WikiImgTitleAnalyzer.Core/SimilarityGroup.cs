@@ -9,11 +9,11 @@ namespace WikiImgTitleAnalyzer.Core
     class SimilarityGroup
     {
         public int GroupIndex { get; set; }
-        public List<string> Strings { get; set; }
+        public HashSet<string> Strings { get; set; }
 
         public SimilarityGroup()
         {
-            Strings = new List<string>();
+            Strings = new HashSet<string>();
         }
 
         public void Add(string value)
@@ -25,7 +25,11 @@ namespace WikiImgTitleAnalyzer.Core
         {
             if (GroupContainsAny(otherGroup))
             {
-                Strings.AddRange(otherGroup.Strings);
+                foreach(var group in Strings)
+                {
+                    otherGroup.Strings.Add(group);
+                }
+                //Strings.AddRange(otherGroup.Strings);
             }
         }
 

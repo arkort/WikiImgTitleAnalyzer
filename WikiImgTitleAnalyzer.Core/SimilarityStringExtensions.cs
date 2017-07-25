@@ -32,23 +32,30 @@ namespace WikiImgTitleAnalyzer.Core
         /// <returns>A substring</returns>
         public static string SubstringSafe(this string str, int startIndex, int length)
         {
-            int startFixed;
-            int lengthFixed;
+            int startFixed = startIndex;
+            int lengthFixed = length;
+            //int shift = 0;
 
-            if (startIndex < 0)
+            if (startFixed < 0)
             {
+                //shift = startFixed;
                 startFixed = 0;
                 lengthFixed = length + startIndex;
             }
+
+            if (startFixed + lengthFixed >= str.Length)
+            {
+                lengthFixed = str.Length - startFixed - 1;
+            }
+
+            if (lengthFixed > 0)
+            {
+                return str.Substring(startFixed, lengthFixed);
+            }
             else
             {
-                startFixed = startIndex;
-                lengthFixed = length;
+                return string.Empty;
             }
-            var endIndex = startFixed + lengthFixed;
-            lengthFixed = endIndex < str.Length ? lengthFixed : str.Length - startFixed;
-
-            return str.Substring(startFixed, lengthFixed);
         }
 
         /// <summary>

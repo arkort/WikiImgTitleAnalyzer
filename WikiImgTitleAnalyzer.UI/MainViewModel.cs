@@ -68,15 +68,39 @@ namespace WikiImgTitleAnalyzer.UI
         {
             _gateway = gateway;
             _similarityProcessor = processor;
+
             StartCommand = new SimpleCommand(StartExecute);
+
+            Latitude = 70;
+            Longtitude = 30;
         }
 
         public async Task Process()
         {
+            SimilarStrings ="Working...";
+
             var articleIds = await _gateway.GetArticleIdsAsync(Latitude, Longtitude, ARTICLE_COUNT);
             var imageTitles = await _gateway.GetImageTitlesAsync(articleIds.ToArray());
 
-            var a = _similarityProcessor.GetMostSimilar(imageTitles);
+            IEnumerable<string> str = null;
+
+            if (imageTitles.Any())
+            {
+                var bgTask = new Task(() =>
+                {
+                    str = _similarityProcessor.GetMostSimilar(imageTitles);
+                });
+                bgTask.ContinueWith((task) => 
+                {
+                    SimilarStrings = string.Join("\n", str);
+                });
+                bgTask.Start();
+
+            }
+            else
+            {
+                SimilarStrings = "No images found.";
+            }
         }
 
         #region NotifyPropertyChanged implementation

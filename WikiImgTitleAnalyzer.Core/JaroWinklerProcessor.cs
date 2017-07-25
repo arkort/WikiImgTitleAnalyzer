@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -72,56 +73,64 @@ namespace WikiImgTitleAnalyzer.Core
                 var jaroValue = 1.0 / 3 * ((mDouble / str1.Length) + (mDouble / str2.Length) + ((mDouble - t / 2.0) / mDouble));
 
                 var l = Math.Min(str1.GetCommonPrefixLength(str2), MAX_PREFIX_LENGTH);
-                return jaroValue + l * P * (1 - jaroValue);
+                return (jaroValue + l * P * (1 - jaroValue));
             }
         }
 
         public IEnumerable<string> GetMostSimilar(IEnumerable<string> strings, bool includeCase = false)
         {
             var groups = new List<SimilarityGroup>();
+            var stringsList = strings.ToList();
 
-            foreach (var str1 in strings)
+            Stopwatch watch = new Stopwatch();
+            watch.Start();
+
+            Parallel.For(0, stringsList.Count - 1, (i) =>
             {
                 Dictionary<int, SimilarityGroup> similarityGroupsInner = new Dictionary<int, SimilarityGroup>();
 
-                foreach (var str2 in strings)
+                for (int j = i + 1; j < stringsList.Count; j++)
                 {
-                    if (str1 == str2)
+                    if (stringsList[i] == stringsList[j])
                     {
                         continue;
                     }
 
-                    var similarity = GetSimilarity(str1, str2, includeCase);
+                    var similarity = GetSimilarity(stringsList[i], stringsList[j], includeCase);
 
-                    var key = (int)(similarity / 10);
+                    var key = (int)(similarity * 10);
 
                     if (!similarityGroupsInner.ContainsKey(key))
                     {
                         similarityGroupsInner.Add(key, new SimilarityGroup() { GroupIndex = key });
                     }
 
-                    if (!similarityGroupsInner[key].Contains(str1))
+                    if (!similarityGroupsInner[key].Contains(stringsList[i]))
                     {
-                        similarityGroupsInner[key].Add(str1);
+                        similarityGroupsInner[key].Add(stringsList[i]);
                     }
-                    similarityGroupsInner[key].Add(str2);
+                    similarityGroupsInner[key].Add(stringsList[j]);
                 }
 
                 var maxKeyItem = similarityGroupsInner.OrderByDescending(x => x.Key).First();
-
-                foreach (var group in groups.Where(x => x.GroupIndex == maxKeyItem.Key))
-                {
-                    group.Merge(maxKeyItem.Value);
-                }
                 groups.Add(maxKeyItem.Value);
-            }
+            });
+
 
             var maxIndex = groups.OrderByDescending(x => x.GroupIndex).First().GroupIndex;
-            return groups
-                .Where(x => x.GroupIndex == maxIndex)
-                .OrderByDescending(x => x.Strings.Count)
-                .First()
-                .Strings;
+            watch.Stop();
+            var maxGroups = groups
+                .Where(x => x.GroupIndex == maxIndex).ToList();
+
+            for(int i = 0; i < maxGroups.Count() - 1; i++)
+            {
+                for(int j = i + 1; j < maxGroups.Count(); j++)
+                {
+                    maxGroups[i].Merge(maxGroups[j]);
+                }
+            }
+
+            return maxGroups.OrderByDescending(x => x.Strings.Count).First().Strings;
         }
     }
 }
