@@ -5,6 +5,7 @@ using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Threading;
 using WikiImgTitleAnalyzer.Core;
 using WikiImgTitleAnalyzer.Core.Gateways;
 using WikiImgTitleAnalyzer.UI;
@@ -18,6 +19,8 @@ namespace WikiImgTitleAnalyzer
     {
         protected override void OnStartup(StartupEventArgs e)
         {
+            this.DispatcherUnhandledException += App_DispatcherUnhandledException;
+
             // Entry point for DI
             var gateway = new WikipediaGateway(
                @"https://en.wikipedia.org/w/api.php?action=query&list=geosearch&gsradius=10000&gscoord={0}|{1}&gslimit=50&format=json",
@@ -29,12 +32,17 @@ namespace WikiImgTitleAnalyzer
 
             var vm = new MainViewModel(gateway, processor);
             vm.Latitude = 51.5;
-            vm.Longtitude = 20;
+            vm.Longtitude = 0.5;
             window.DataContext = vm;
 
             window.Show();
 
             base.OnStartup(e);
+        }
+
+        private void App_DispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
+        {
+            MessageBox.Show(e.Exception.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
         }
     }
 }

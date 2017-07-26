@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using WikiImgTitleAnalyzer.Core.Entities;
+using WikiImgTitleAnalyzer.Core.Entities.Exceptions;
 using WikiImgTitleAnalyzer.Interfaces;
 
 namespace WikiImgTitleAnalyzer.Core
@@ -52,7 +53,14 @@ namespace WikiImgTitleAnalyzer.Core
         /// <returns>Double number between 0 and 1.</returns>
         public double GetSimilarity(string stringOne, string stringTwo)
         {
-            return GetSimilarity(new ComparisonString(stringOne), new ComparisonString(stringTwo));
+            try
+            {
+                return GetSimilarity(new ComparisonString(stringOne), new ComparisonString(stringTwo));
+            }
+            catch(Exception e)
+            {
+                throw new SimilarityCheckException(e);
+            }
         }
 
         /// <summary>
@@ -65,22 +73,29 @@ namespace WikiImgTitleAnalyzer.Core
             var groups = new List<SimilarityGroup>();
             var stringsList = strings.ToList();
 
-            // Find most similar strings for each string in array
-            Parallel.For(0, stringsList.Count - 1, (i) =>
+            try
             {
-                GetSimilarityGroupsFromParticularString(i, stringsList, groups);
-            });
+                // Find most similar strings for each string in array
+                Parallel.For(0, stringsList.Count - 1, (i) =>
+                {
+                    GetSimilarityGroupsFromParticularString(i, stringsList, groups);
+                });
 
-            // As we need MOST similar strings - use max group index
-            var maxIndex = groups.OrderByDescending(x => x.GroupIndex).First().GroupIndex;
+                // As we need MOST similar strings - use max group index
+                var maxIndex = groups.OrderByDescending(x => x.GroupIndex).First().GroupIndex;
 
-            // Get all the groups with maximum index (here will be groups of different i strings)
-            var maxGroups = groups.Where(x => x.GroupIndex == maxIndex).ToList();
+                // Get all the groups with maximum index (here will be groups of different i strings)
+                var maxGroups = groups.Where(x => x.GroupIndex == maxIndex).ToList();
 
-            // Merge groups if necessary
-            ProcessGroupMerging(maxGroups);
+                // Merge groups if necessary
+                ProcessGroupMerging(maxGroups);
 
-            return maxGroups.OrderByDescending(x => x.Strings.Count).First().Strings;
+                return maxGroups.OrderByDescending(x => x.Strings.Count).First().Strings;
+            }
+            catch(Exception e)
+            {
+                throw new SimilarityCheckException(e);
+            }
         }
 
         /// <summary>
