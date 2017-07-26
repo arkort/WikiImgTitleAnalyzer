@@ -110,6 +110,7 @@ namespace WikiImgTitleAnalyzer.Core
                 if (!similarityGroupsInner.ContainsKey(groupIndex))
                 {
                     similarityGroupsInner.Add(groupIndex, new SimilarityGroup() { GroupIndex = groupIndex }); // Add new group if necessary
+                    similarityGroupsInner[groupIndex].Add(stringsList[i]);
                 }
 
                 similarityGroupsInner[groupIndex].Add(stringsList[j]);

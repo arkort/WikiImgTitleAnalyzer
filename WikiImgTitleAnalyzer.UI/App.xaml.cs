@@ -18,14 +18,20 @@ namespace WikiImgTitleAnalyzer
     {
         protected override void OnStartup(StartupEventArgs e)
         {
+            // Entry point for DI
             var gateway = new WikipediaGateway(
-       @"https://en.wikipedia.org/w/api.php?action=query&list=geosearch&gsradius=10000&gscoord={0}|{1}&gslimit=50&format=json",
-       @"https://en.wikipedia.org/w/api.php?action=query&prop=images&pageids={0}&format=json&imlimit=50");
+               @"https://en.wikipedia.org/w/api.php?action=query&list=geosearch&gsradius=10000&gscoord={0}|{1}&gslimit=50&format=json",
+               @"https://en.wikipedia.org/w/api.php?action=query&prop=images&pageids={0}&format=json&imlimit=50");
 
             var processor = SymbolPairsSimilarityProcessor.Instance;
 
             var window = new MainWindow();
-            window.DataContext = new MainViewModel(gateway, processor);
+
+            var vm = new MainViewModel(gateway, processor);
+            vm.Latitude = 51.5;
+            vm.Longtitude = 20;
+            window.DataContext = vm;
+
             window.Show();
 
             base.OnStartup(e);

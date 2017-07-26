@@ -58,7 +58,7 @@ namespace WikiImgTitleAnalyzer.UI
 
         public ICommand StartCommand { get; private set; }
 
-        public async void StartExecute()
+        public async Task StartExecute()
         {
             await ProcessGettingSimilarStrings();
         }
@@ -69,15 +69,12 @@ namespace WikiImgTitleAnalyzer.UI
             _gateway = gateway;
             _similarityProcessor = processor;
 
-            StartCommand = new SimpleCommand(StartExecute);
-
-            Latitude = 70;
-            Longtitude = 30;
+            StartCommand = new SimpleCommand(async () => await StartExecute());
         }
 
         public async Task ProcessGettingSimilarStrings()
         {
-            SimilarStrings ="Working...";
+            SimilarStrings = "Working...";
 
             var articleIds = await _gateway.GetArticleIdsAsync(Latitude, Longtitude, ARTICLE_COUNT);
             var imageTitles = await _gateway.GetImageTitlesAsync(articleIds.ToArray());
@@ -90,12 +87,9 @@ namespace WikiImgTitleAnalyzer.UI
                 {
                     str = _similarityProcessor.GetMostSimilar(imageTitles);
                 });
-                bgTask.ContinueWith((task) => 
-                {
-                    SimilarStrings = string.Join("\n", str);
-                });
                 bgTask.Start();
-
+                await bgTask;
+                SimilarStrings = string.Join("\n", str);
             }
             else
             {

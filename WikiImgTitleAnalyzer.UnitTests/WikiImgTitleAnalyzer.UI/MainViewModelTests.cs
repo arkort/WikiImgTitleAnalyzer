@@ -5,6 +5,7 @@ using Moq;
 using WikiImgTitleAnalyzer.Interfaces;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace WikiImgTitleAnalyzer.UnitTests.WikiImgTitleAnalyzer.UI
 {
@@ -17,21 +18,37 @@ namespace WikiImgTitleAnalyzer.UnitTests.WikiImgTitleAnalyzer.UI
         public void Prepare()
         {
             Mock<IHttpGateway> gatewayMock = new Mock<IHttpGateway>();
-            gatewayMock.Setup(g => g.GetArticleIdsAsync(It.IsAny<double>(), It.IsAny<double>(), It.IsAny<int>())).Returns<Task<IEnumerable<int>>>((res) => new Task<IEnumerable<int>>(()=> { return new List<int>(); }));
-            gatewayMock.Setup(g => g.GetImageTitlesAsync(It.IsAny<int[]>())).Returns<Task<IEnumerable<string>>>((res) => res);
+            gatewayMock
+                .Setup(g => g.GetArticleIdsAsync(It.IsAny<double>(), It.IsAny<double>(), It.IsAny<int>()))
+                .Returns(
+                    Task.FromResult<IEnumerable<int>>
+                    (
+                        new List<int>() { 1, 2, 3 }
+                    )
+                );
+
+            gatewayMock
+                .Setup(g => g.GetImageTitlesAsync(It.IsAny<int[]>()))
+                .Returns(
+                    Task.FromResult<IEnumerable<string>>
+                    (
+                        new List<string>() { "Similar1", "Similar2", "Not similar" }
+                    )
+                );
 
             Mock<ISimilarityStringProcessor> stringProcessorMock = new Mock<ISimilarityStringProcessor>();
-            stringProcessorMock.Setup(g => g.GetMostSimilar(It.IsAny<IEnumerable<string>>())).Returns<IEnumerable<string>>((x) => new List<string>() { "Similar1", "Similar2" });
+            stringProcessorMock.Setup(g => g.GetMostSimilar(It.IsAny<IEnumerable<string>>())).Returns(
+                (IEnumerable<string> init) => { return init.Where(x => x.StartsWith("Similar")); });
 
             _vm = new MainViewModel(gatewayMock.Object, stringProcessorMock.Object);
         }
 
         [TestMethod]
-        public void StartExecuteTest()
+        public async Task StartExecuteTest()
         {
             _vm.Latitude = 10;
             _vm.Longtitude = 10;
-            _vm.StartExecute();
+            await _vm.StartExecute();
             Assert.AreEqual("Similar1\nSimilar2", _vm.SimilarStrings);
         }
     }
