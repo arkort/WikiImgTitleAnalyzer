@@ -32,17 +32,7 @@ namespace WikiImgTitleAnalyzer.Core
 
         }
 
-        /// <summary>
-        /// Internal method that processes string comparison
-        /// </summary>
-        /// <param name="stringOne"></param>
-        /// <param name="stringTwo"></param>
-        /// <returns></returns>
-        double GetSimilarity(ComparisonString stringOne, ComparisonString stringTwo)
-        {
-            var intersection = stringOne.SymbolPairs.Intersect(stringTwo.SymbolPairs);
-            return 2.0 * intersection.Count() / (stringOne.SymbolPairs.Count + stringTwo.SymbolPairs.Count);
-        }
+        #region Interface members
 
         /// <summary>
         /// Checks how similar two strings are
@@ -98,6 +88,22 @@ namespace WikiImgTitleAnalyzer.Core
             }
         }
 
+        #endregion
+
+        #region Non-public members
+
+        /// <summary>
+        /// Internal method that processes string comparison
+        /// </summary>
+        /// <param name="stringOne"></param>
+        /// <param name="stringTwo"></param>
+        /// <returns></returns>
+        double GetSimilarity(ComparisonString stringOne, ComparisonString stringTwo)
+        {
+            var intersection = stringOne.SymbolPairs.Intersect(stringTwo.SymbolPairs);
+            return 2.0 * intersection.Count() / (stringOne.SymbolPairs.Count + stringTwo.SymbolPairs.Count);
+        }
+
         /// <summary>
         /// Compares i string to all the others and gets some similarity groups
         /// </summary>
@@ -150,5 +156,7 @@ namespace WikiImgTitleAnalyzer.Core
                 }
             }
         }
+
+        #endregion
     }
 }

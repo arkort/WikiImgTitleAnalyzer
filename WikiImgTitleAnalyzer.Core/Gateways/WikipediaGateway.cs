@@ -16,10 +16,14 @@ namespace WikiImgTitleAnalyzer.Core.Gateways
     /// </summary>
     public class WikipediaGateway : IHttpGateway
     {
+        #region Private fields
+
         private static readonly HttpClient _client = new HttpClient();
 
         private string _getArticlesUrl;
         private string _getImagesUrl;
+
+        #endregion
 
         /// <summary>
         /// Constructor
@@ -31,6 +35,8 @@ namespace WikiImgTitleAnalyzer.Core.Gateways
             _getArticlesUrl = getArticlesUrl;
             _getImagesUrl = getImagesUrl;
         }
+
+        #region Interface members
 
         /// <summary>
         /// Gets article ids for current position on map
@@ -58,6 +64,10 @@ namespace WikiImgTitleAnalyzer.Core.Gateways
             return response.SelectTokens("query.pages.*.images[*].title").Select(t => (string)t);
         }
 
+        #endregion
+
+        #region Non-public members
+
         private async Task<JObject> GetHttpResponseJson(string baseUrl, params object[] parameters)
         {
             var response = await _client.GetAsync(ConstructFinalUrl(baseUrl, parameters));
@@ -74,5 +84,7 @@ namespace WikiImgTitleAnalyzer.Core.Gateways
         {
             return string.Join("|", pageIds);
         }
+
+        #endregion
     }
 }
