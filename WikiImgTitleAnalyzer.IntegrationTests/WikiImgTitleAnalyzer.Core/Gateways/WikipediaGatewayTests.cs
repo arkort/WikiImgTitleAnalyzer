@@ -29,7 +29,7 @@ namespace WikiImgTitleAnalyzer.IntegrationTests.WikiImgTitleAnalyzer.Core.Gatewa
             var imageTitles = await _gateway.GetImageTitlesAsync(9292891, 18618509);
 
             Assert.IsNotNull(imageTitles);
-            Assert.AreEqual(imageTitles.Count(), 48);
+            Assert.AreEqual(imageTitles.Count(), 49);
         }
 
         [TestMethod]
