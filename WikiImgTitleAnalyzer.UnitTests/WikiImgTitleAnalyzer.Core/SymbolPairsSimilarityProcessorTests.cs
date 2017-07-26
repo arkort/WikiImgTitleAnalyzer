@@ -43,7 +43,7 @@ namespace WikiImgTitleAnalyzer.UnitTests.WikiImgTitleAnalyzer.Core
             };
 
             var similar = _processor.GetMostSimilar(stringList);
-            CollectionAssert.AreEquivalent(new[] { "Iteration", "Another iteration" }, similar.ToArray());
+            CollectionAssert.AreEquivalent(new[] { "Iteration", "Another iteration" }, similar.SimilarStrings.ToArray());
         }
     }
 }

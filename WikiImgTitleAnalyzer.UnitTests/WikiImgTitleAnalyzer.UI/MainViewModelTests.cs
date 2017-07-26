@@ -36,9 +36,15 @@ namespace WikiImgTitleAnalyzer.UnitTests.WikiImgTitleAnalyzer.UI
                     )
                 );
 
-            Mock<ISimilarityStringProcessor> stringProcessorMock = new Mock<ISimilarityStringProcessor>();
+            var mockResult = new Mock<ISimilarityResult>();
+            mockResult.Setup(s => s.SimilarStrings).Returns(new HashSet<string>() { "Similar1", "Similar2" });
+
+            Mock <ISimilarityStringProcessor> stringProcessorMock = new Mock<ISimilarityStringProcessor>();
             stringProcessorMock.Setup(g => g.GetMostSimilar(It.IsAny<IEnumerable<string>>())).Returns(
-                (IEnumerable<string> init) => { return init.Where(x => x.StartsWith("Similar")); });
+                (IEnumerable<string> init) => 
+                {
+                    return mockResult.Object;
+                });
 
             _vm = new MainViewModel(gatewayMock.Object, stringProcessorMock.Object);
         }

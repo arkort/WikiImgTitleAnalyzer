@@ -18,7 +18,11 @@
                 Height="Auto" />
             <RowDefinition
                 Height="Auto" />
+            <RowDefinition
+                Height="Auto" />
             <RowDefinition />
+            <RowDefinition
+                Height="Auto" />
         </Grid.RowDefinitions>
         <TextBlock
             Text="Latitude"/>
@@ -37,12 +41,20 @@
             Grid.ColumnSpan="2"
             Content="Start!"
             Command="{Binding StartCommand}"/>
-        <TextBox 
+        <TextBlock 
             Grid.Row="3"
+            Grid.ColumnSpan="2"
+            Text="{Binding SimilarityPercentageString}" />
+        <TextBox 
+            Grid.Row="4"
             Grid.ColumnSpan="2"
             VerticalAlignment="Stretch"
             HorizontalAlignment="Stretch"
             IsEnabled="False"
             Text="{Binding SimilarStrings}"/>
+        <TextBlock 
+            Grid.Row="5"
+            Grid.ColumnSpan="2"
+            Text="{Binding LowerSimilarityPercentageString}" />
     </Grid>
 </Window>

@@ -19,7 +19,7 @@ namespace WikiImgTitleAnalyzer.Interfaces
         /// <returns>Double number between 0 and 1.</returns>
         double GetSimilarity(string stringOne, string stringTwo);
 
-        IEnumerable<string> GetMostSimilar(IEnumerable<string> strings);
+        ISimilarityResult GetMostSimilar(IEnumerable<string> strings);
 
     }
 }

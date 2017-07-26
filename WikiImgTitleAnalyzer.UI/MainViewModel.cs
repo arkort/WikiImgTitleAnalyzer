@@ -22,9 +22,14 @@ namespace WikiImgTitleAnalyzer.UI
         #endregion
 
         #region UI fields, properties and commands
+        private const string SIMILARITY_PERCENTAGE_MESSAGE = "These titles are {0}-{1}% similar";
+        private const string LOWER_SIMILARITY_PERCENTAGE_MESSAGE = "There are {0} more titles that are less than {1}% similar";
+
         private double _latitude;
         private double _longtitude;
         private string _similarStrings;
+        private string _similarityPercentageString;
+        private string _lowerSimilarityPercentageString;
 
         public double Latitude
         {
@@ -56,12 +61,43 @@ namespace WikiImgTitleAnalyzer.UI
             }
         }
 
+        public string SimilarityPercentageString
+        {
+            get { return _similarityPercentageString; }
+            set
+            {
+                _similarityPercentageString = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public string LowerSimilarityPercentageString
+        {
+            get { return _lowerSimilarityPercentageString; }
+            set
+            {
+                _lowerSimilarityPercentageString = value;
+                OnPropertyChanged();
+            }
+        }
+
         public ICommand StartCommand { get; private set; }
 
         public async Task StartExecute()
         {
             await ProcessGettingSimilarStrings();
         }
+
+        private void SetSimilarityPercentageString(int similarityIndex)
+        {
+            SimilarityPercentageString = string.Format(SIMILARITY_PERCENTAGE_MESSAGE, similarityIndex * 10, (similarityIndex + 1) * 10);
+        }
+
+        private void SetLowerSimilarityPercentageString(int similarityIndex, int count)
+        {
+            LowerSimilarityPercentageString = string.Format(LOWER_SIMILARITY_PERCENTAGE_MESSAGE, count, similarityIndex * 10);
+        }
+
         #endregion
 
         public MainViewModel(IHttpGateway gateway, ISimilarityStringProcessor processor)
@@ -75,21 +111,26 @@ namespace WikiImgTitleAnalyzer.UI
         public async Task ProcessGettingSimilarStrings()
         {
             SimilarStrings = "Working...";
+            SimilarityPercentageString = string.Empty;
+            LowerSimilarityPercentageString = string.Empty;
 
             var articleIds = await _gateway.GetArticleIdsAsync(Latitude, Longtitude, ARTICLE_COUNT);
             var imageTitles = await _gateway.GetImageTitlesAsync(articleIds.ToArray());
 
-            IEnumerable<string> str = null;
+            ISimilarityResult similarityResult = null;
 
             if (imageTitles.Any())
             {
                 var bgTask = new Task(() =>
                 {
-                    str = _similarityProcessor.GetMostSimilar(imageTitles);
+                    similarityResult = _similarityProcessor.GetMostSimilar(imageTitles);
                 });
                 bgTask.Start();
                 await bgTask;
-                SimilarStrings = string.Join("\n", str);
+
+                SimilarStrings = string.Join("\n", similarityResult.SimilarStrings);
+                SetSimilarityPercentageString(similarityResult.SimilarityIndex);
+                SetLowerSimilarityPercentageString(similarityResult.SimilarityIndex, imageTitles.Count() - similarityResult.SimilarStrings.Count);
             }
             else
             {

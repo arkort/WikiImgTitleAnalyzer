@@ -58,9 +58,9 @@ namespace WikiImgTitleAnalyzer.Core
         /// </summary>
         /// <param name="strings">Initial list of strings</param>
         /// <returns>Set of most similar strings</returns>
-        public IEnumerable<string> GetMostSimilar(IEnumerable<string> strings)
+        public ISimilarityResult GetMostSimilar(IEnumerable<string> strings)
         {
-            var groups = new List<SimilarityGroup>();
+            var groups = new List<SymbolPairsSimilarityGroup>();
             var stringsList = strings.ToList();
 
             try
@@ -72,15 +72,15 @@ namespace WikiImgTitleAnalyzer.Core
                 });
 
                 // As we need MOST similar strings - use max group index
-                var maxIndex = groups.OrderByDescending(x => x.GroupIndex).First().GroupIndex;
+                var maxIndex = groups.OrderByDescending(x => x.SimilarityIndex).First().SimilarityIndex;
 
                 // Get all the groups with maximum index (here will be groups of different i strings)
-                var maxGroups = groups.Where(x => x.GroupIndex == maxIndex).ToList();
+                var maxGroups = groups.Where(x => x.SimilarityIndex == maxIndex).ToList();
 
                 // Merge groups if necessary
                 ProcessGroupMerging(maxGroups);
 
-                return maxGroups.OrderByDescending(x => x.Strings.Count).First().Strings;
+                return maxGroups.OrderByDescending(x => x.SimilarStrings.Count).First();
             }
             catch(Exception e)
             {
@@ -110,9 +110,9 @@ namespace WikiImgTitleAnalyzer.Core
         /// <param name="i"></param>
         /// <param name="stringsList"></param>
         /// <param name="groups"></param>
-        private void GetSimilarityGroupsFromParticularString(int i, List<string> stringsList, List<SimilarityGroup> groups)
+        private void GetSimilarityGroupsFromParticularString(int i, List<string> stringsList, List<SymbolPairsSimilarityGroup> groups)
         {
-            Dictionary<int, SimilarityGroup> similarityGroupsInner = new Dictionary<int, SimilarityGroup>();
+            Dictionary<int, SymbolPairsSimilarityGroup> similarityGroupsInner = new Dictionary<int, SymbolPairsSimilarityGroup>();
 
             for (int j = i + 1; j < stringsList.Count; j++)
             {
@@ -130,7 +130,7 @@ namespace WikiImgTitleAnalyzer.Core
 
                 if (!similarityGroupsInner.ContainsKey(groupIndex))
                 {
-                    similarityGroupsInner.Add(groupIndex, new SimilarityGroup() { GroupIndex = groupIndex }); // Add new group if necessary
+                    similarityGroupsInner.Add(groupIndex, new SymbolPairsSimilarityGroup() { SimilarityIndex = groupIndex }); // Add new group if necessary
                     similarityGroupsInner[groupIndex].Add(stringsList[i]);
                 }
 
@@ -146,7 +146,7 @@ namespace WikiImgTitleAnalyzer.Core
         /// This method checks if there are any intersections between different groups. If there are it just merges them and puts the result instead of the j group. This way we get the largest similar string group.
         /// </summary>
         /// <param name="maxGroups"></param>
-        private void ProcessGroupMerging(List<SimilarityGroup> maxGroups) 
+        private void ProcessGroupMerging(List<SymbolPairsSimilarityGroup> maxGroups) 
         {
             for (int i = 0; i < maxGroups.Count() - 1; i++)
             {

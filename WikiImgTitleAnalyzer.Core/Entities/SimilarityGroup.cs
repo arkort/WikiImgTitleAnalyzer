@@ -3,30 +3,31 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WikiImgTitleAnalyzer.Interfaces;
 
-namespace WikiImgTitleAnalyzer.Core
+namespace WikiImgTitleAnalyzer.Core.Entities
 {
     /// <summary>
     /// Class that aggregates strings that have same similarity index
     /// </summary>
-    class SimilarityGroup
+    public class SymbolPairsSimilarityGroup : ISimilarityResult
     {
         /// <summary>
         /// Group index
         /// </summary>
-        public int GroupIndex { get; set; }
+        public int SimilarityIndex { get; set; }
 
         /// <summary>
         /// Strings that are similar according to Group index
         /// </summary>
-        public HashSet<string> Strings { get; set; }
+        public HashSet<string> SimilarStrings { get; set; }
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public SimilarityGroup()
+        public SymbolPairsSimilarityGroup()
         {
-            Strings = new HashSet<string>();
+            SimilarStrings = new HashSet<string>();
         }
 
         /// <summary>
@@ -35,20 +36,20 @@ namespace WikiImgTitleAnalyzer.Core
         /// <param name="value">String to add</param>
         public void Add(string value)
         {
-            Strings.Add(value);
+            SimilarStrings.Add(value);
         }
         
         /// <summary>
         /// Merge group to another one
         /// </summary>
         /// <param name="otherGroup">Group where current will be merged</param>
-        public void Merge(SimilarityGroup otherGroup)
+        public void Merge(SymbolPairsSimilarityGroup otherGroup)
         {
             if (GroupContainsAny(otherGroup))
             {
-                foreach(var str in Strings)
+                foreach(var str in SimilarStrings)
                 {
-                    otherGroup.Strings.Add(str);
+                    otherGroup.SimilarStrings.Add(str);
                 }
             }
         }
@@ -60,14 +61,14 @@ namespace WikiImgTitleAnalyzer.Core
         /// <returns>true is contains, false otherwise</returns>
         public bool Contains(string item)
         {
-            return Strings.Contains(item);
+            return SimilarStrings.Contains(item);
         }
 
-        private bool GroupContainsAny(SimilarityGroup otherGroup)
+        private bool GroupContainsAny(SymbolPairsSimilarityGroup otherGroup)
         {
-            foreach(var str in otherGroup.Strings)
+            foreach(var str in otherGroup.SimilarStrings)
             {
-                if (Strings.Contains(str))
+                if (SimilarStrings.Contains(str))
                 {
                     return true;
                 }
