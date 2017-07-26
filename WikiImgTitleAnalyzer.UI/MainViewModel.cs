@@ -60,7 +60,7 @@ namespace WikiImgTitleAnalyzer.UI
 
         public async void StartExecute()
         {
-            await Process();
+            await ProcessGettingSimilarStrings();
         }
         #endregion
 
@@ -75,7 +75,7 @@ namespace WikiImgTitleAnalyzer.UI
             Longtitude = 30;
         }
 
-        public async Task Process()
+        public async Task ProcessGettingSimilarStrings()
         {
             SimilarStrings ="Working...";
 

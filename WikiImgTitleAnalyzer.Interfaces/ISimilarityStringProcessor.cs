@@ -17,9 +17,9 @@ namespace WikiImgTitleAnalyzer.Interfaces
         /// <param name="stringOne">String one</param>
         /// <param name="stringTwo">String two</param>
         /// <returns>Double number between 0 and 1.</returns>
-        double GetSimilarity(string stringOne, string stringTwo, bool includeCase = false);
+        double GetSimilarity(string stringOne, string stringTwo);
 
-        IEnumerable<string> GetMostSimilar(IEnumerable<string> strings, bool includeCase = false);
+        IEnumerable<string> GetMostSimilar(IEnumerable<string> strings);
 
     }
 }

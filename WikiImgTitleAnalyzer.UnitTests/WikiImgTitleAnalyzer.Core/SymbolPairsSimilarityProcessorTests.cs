@@ -9,15 +9,21 @@ using WikiImgTitleAnalyzer.Core;
 namespace WikiImgTitleAnalyzer.UnitTests.WikiImgTitleAnalyzer.Core
 {
     [TestClass]
-    public class JaroWinklerProcessorTests
+    public class SymbolPairsSimilarityProcessorTests
     {
-        JaroWinklerProcessor _processor = JaroWinklerProcessor.Instance;
+        SymbolPairsSimilarityProcessor _processor = SymbolPairsSimilarityProcessor.Instance;
 
         [TestMethod]
         public void GetSimilarityTest()
         {
             var similarity = _processor.GetSimilarity("MARTHA", "MARHTA");
-            Assert.AreEqual(0.96, Math.Round(similarity, 2));
+            Assert.AreEqual(similarity, 0.4);
+
+            similarity = _processor.GetSimilarity("FRANCE", "FRENCH");
+            Assert.AreEqual(similarity, 0.4);
+
+            similarity = _processor.GetSimilarity("a", "FRENCH");
+            Assert.AreEqual(similarity, 0);
         }
 
         [TestMethod]
@@ -37,6 +43,7 @@ namespace WikiImgTitleAnalyzer.UnitTests.WikiImgTitleAnalyzer.Core
             };
 
             var similar = _processor.GetMostSimilar(stringList);
+            CollectionAssert.AreEquivalent(new[] { "Iteration", "Another iteration" }, similar.ToArray());
         }
     }
 }

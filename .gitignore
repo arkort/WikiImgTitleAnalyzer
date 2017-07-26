@@ -14,3 +14,4 @@
 /packages
 /WikiImgTitleAnalyzer.UnitTests/bin/Debug
 /WikiImgTitleAnalyzer.UnitTests/obj/Debug
+/.vs/WikiImgTitleAnalyzer/v15/*.suo

@@ -11,6 +11,9 @@ using WikiImgTitleAnalyzer.Interfaces;
 
 namespace WikiImgTitleAnalyzer.Core.Gateways
 {
+    /// <summary>
+    /// Getter of articles and images from Wikipedia
+    /// </summary>
     public class WikipediaGateway : IHttpGateway
     {
         private static readonly HttpClient _client = new HttpClient();
@@ -18,12 +21,24 @@ namespace WikiImgTitleAnalyzer.Core.Gateways
         private string _getArticlesUrl;
         private string _getImagesUrl;
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="getArticlesUrl">URL template for getting articles</param>
+        /// <param name="getImagesUrl">URL template for getting images</param>
         public WikipediaGateway(string getArticlesUrl, string getImagesUrl)
         {
             _getArticlesUrl = getArticlesUrl;
             _getImagesUrl = getImagesUrl;
         }
 
+        /// <summary>
+        /// Gets article ids for current position on map
+        /// </summary>
+        /// <param name="latitude">Latitude</param>
+        /// <param name="longtitude">Longtitude</param>
+        /// <param name="count">Article count</param>
+        /// <returns>Array of ids</returns>
         public async Task<IEnumerable<int>> GetArticleIdsAsync(double latitude, double longtitude, int count)
         {
             var response = await GetHttpResponseJson(_getArticlesUrl, latitude, longtitude, count);
@@ -31,6 +46,11 @@ namespace WikiImgTitleAnalyzer.Core.Gateways
             return response.SelectTokens("query.geosearch[*].pageid").Select(t => (int)t);
         }
 
+        /// <summary>
+        /// Gets image titles from articles
+        /// </summary>
+        /// <param name="articleIds">Ids of requested articles</param>
+        /// <returns>Array of titles</returns>
         public async Task<IEnumerable<string>> GetImageTitlesAsync(params int[] articleIds)
         {
             var response = await GetHttpResponseJson(_getImagesUrl, ConstructPageIdsArrayString(articleIds));
